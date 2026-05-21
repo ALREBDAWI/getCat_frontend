@@ -6,8 +6,6 @@ export default function SignupPage() {
   // useState hook to store form data
   const [formData, setFormData] = useState({
     // these ' attributes just like the request DTO in backend
-    firstname: "",
-    lastname: "",
     email: "",
     password: ""
   });
@@ -23,7 +21,7 @@ export default function SignupPage() {
     // transform data into json befor sensing with post method
     console.log("Données envoyées au Backend (JSON):", JSON.stringify(formData));
 
-    const response = await fetch('http://localhost:9090/api/v1/auth/register', {
+    const response = await fetch('http://localhost:9090/api/v1/auth/authenticate', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(formData)
@@ -42,33 +40,11 @@ export default function SignupPage() {
     <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
       <div className="max-w-md w-full bg-white rounded-xl shadow-lg p-8">
         <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">
-          Créer un compte
+          se connecter
         </h2>
         
         <form onSubmit={handleSubmit} className="space-y-4">
-          {/* First Name */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Prénom</label>
-            <input
-              type="text"
-              name="firstname"
-              required
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
-              onChange={handleChange}
-            />
-          </div>
-
-          {/* Last Name */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Nom</label>
-            <input
-              type="text"
-              name="lastname"
-              required
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
-              onChange={handleChange}
-            />
-          </div>
+          
 
           {/* Email */}
           <div>
@@ -98,13 +74,9 @@ export default function SignupPage() {
             type="submit"
             className="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 transition duration-200 font-semibold"
           >
-            S'inscrire
+            Se connecter
           </button>
         </form>
-        
-        <p className="mt-4 text-center text-sm text-gray-600">
-          Déjà inscrit ? <a href="/auth/signin" className="text-indigo-600 hover:underline">Se connecter</a>
-        </p>
       </div>
     </div>
   );
