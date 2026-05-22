@@ -8,12 +8,43 @@ export default function CreatePostPage() {
   const [serviceType, setServiceType] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [selectedFile, setSelectedFile] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
       const token = localStorage.getItem("getcat_user_token");
+
+      let uploadedImageUrl = "";
+
+      // upload image first
+
+      if (selectedFile) {
+
+        const imageData = new FormData();
+
+        imageData.append("image", selectedFile);
+
+        const uploadResponse = await fetch(
+          "http://localhost:9090/api/test/upload-post-image",
+          {
+            method: "POST",
+
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+
+            body: imageData,
+          }
+        );
+
+        if (!uploadResponse.ok) {
+          throw new Error("Image upload failed");
+        }
+
+        uploadedImageUrl = await uploadResponse.text();
+      }
 
       const response = await fetch(
         "http://localhost:9090/api/posts/create_post",
@@ -26,7 +57,7 @@ export default function CreatePostPage() {
 
           body: JSON.stringify({
             description,
-            animalPhoto: null,
+            animalPhoto: uploadedImageUrl,
             startDate,
             endDate,
             serviceType,
@@ -54,6 +85,7 @@ export default function CreatePostPage() {
       console.error(error);
       alert("Error creating post");
     }
+    
   };
 
   return (
@@ -70,7 +102,13 @@ export default function CreatePostPage() {
         </div>
 
         <br />
-
+        <div>
+          <input
+          type="file"
+          accept="image/*"
+          onChange={(e) => setSelectedFile(e.target.files[0])}
+          />
+        </div>
         <div>
           <label>Animal Type:</label>
 
