@@ -89,84 +89,120 @@ export default function CreatePostPage() {
   };
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h1>Create Post</h1>
+  <div className="min-h-screen bg-gray-100 py-10 px-4">
+    <div className="max-w-2xl mx-auto bg-white rounded-2xl shadow-lg p-8">
+      <h1 className="text-3xl font-bold text-gray-800 mb-8">
+        Create Post
+      </h1>
 
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Description */}
         <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Description
+          </label>
+
           <textarea
-            placeholder="Description"
+            placeholder="Tell people about your post..."
             value={description}
             onChange={(e) => setDescription(e.target.value)}
+            rows={5}
+            className="w-full rounded-xl border border-gray-300 p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
 
-        <br />
+        {/* Image Upload */}
         <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Upload Image
+          </label>
+
           <input
-          type="file"
-          accept="image/*"
-          onChange={(e) => setSelectedFile(e.target.files[0])}
+            type="file"
+            accept="image/*"
+            onChange={(e) => setSelectedFile(e.target.files?.[0])}
+            className="block w-full text-sm text-gray-600
+              file:mr-4 file:rounded-lg file:border-0
+              file:bg-blue-50 file:px-4 file:py-2
+              file:text-blue-600 file:font-medium
+              hover:file:bg-blue-100"
           />
         </div>
+
+        {/* Animal Type */}
         <div>
-          <label>Animal Type:</label>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Animal Type
+          </label>
 
           <select
             value={animalSpecies}
             onChange={(e) => setAnimalSpecies(e.target.value)}
-            >
+            className="w-full rounded-xl border border-gray-300 p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
             <option value="">Select Animal</option>
-            <option value="CAT">cat</option>
-            <option value="DOG">dog</option>
-            <option value="BIRD">bird</option>
-            <option value="LIZARD">lizard</option>
-            </select>
+            <option value="CAT">Cat</option>
+            <option value="DOG">Dog</option>
+            <option value="BIRD">Bird</option>
+            <option value="LIZARD">Lizard</option>
+          </select>
         </div>
 
-        <br />
-
+        {/* Service Type */}
         <div>
-          <label>Service Type:</label>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Service Type
+          </label>
 
           <select
             value={serviceType}
             onChange={(e) => setServiceType(e.target.value)}
+            className="w-full rounded-xl border border-gray-300 p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
-            <option value="">Select service</option>
-            <option value="HOST">host</option>
-            <option value="GUEST">guest</option>
+            <option value="">Select Service</option>
+            <option value="HOST">Host</option>
+            <option value="GUEST">Guest</option>
           </select>
         </div>
 
-        <br />
+        {/* Dates */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Start Date
+            </label>
 
-        <div>
-          <label>Start Date:</label>
+            <input
+              type="date"
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
+              className="w-full rounded-xl border border-gray-300 p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
 
-          <input
-            type="date"
-            value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
-          />
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              End Date
+            </label>
+
+            <input
+              type="date"
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
+              className="w-full rounded-xl border border-gray-300 p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
         </div>
 
-        <br />
-
-        <div>
-          <label>End Date:</label>
-
-          <input
-            type="date"
-            value={endDate}
-            onChange={(e) => setEndDate(e.target.value)}
-          />
-        </div>
-
-        <br />
-
-        <button type="submit">Create Post</button>
+        {/* Submit */}
+        <button
+          type="submit"
+          className="w-full bg-blue-600 text-white font-semibold py-3 rounded-xl hover:bg-blue-700 transition duration-200"
+        >
+          Create Post
+        </button>
       </form>
     </div>
-  );
+  </div>
+);
 }
