@@ -213,7 +213,7 @@ export default function PostDetailsPage() {
 
               
                 
-                <button
+                <Link href={`/profile/${post.user.id}`}
                 className="
                   w-full
                   mt-6
@@ -227,7 +227,7 @@ export default function PostDetailsPage() {
                 "
               >
                   Contact Owner
-              </button>
+              </Link>
               
               
 
