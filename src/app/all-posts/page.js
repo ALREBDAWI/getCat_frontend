@@ -1,14 +1,29 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export default function AllPostsPage() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [serviceType, setServiceType] = useState("");
+
+  const serviceTypes = [
+    { value: "", label: "All Services" },
+    { value: "PET_SITTING", label: "Pet Sitting" },
+    { value: "PET_BOARDING", label: "Pet Boarding" },
+    { value: "DOG_WALKING", label: "Dog Walking" },
+    { value: "PET_GROOMING", label: "Pet Grooming" },
+    { value: "VETERINARY_VISIT", label: "Veterinary Visit" },
+  ];
 
   useEffect(() => {
     fetchPosts();
   }, []);
+
+  useEffect(() => {
+    fetchFilteredPosts();
+  }, [serviceType]);
 
   const fetchPosts = async () => {
     try {
@@ -21,218 +36,183 @@ export default function AllPostsPage() {
       }
 
       const data = await response.json();
-
       setPosts(data);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
       setLoading(false);
     }
   };
 
+  const fetchFilteredPosts = async () => {
+    try {
+      const url = serviceType
+        ? `http://localhost:9090/api/posts/all-posts?serviceType=${serviceType}`
+        : `http://localhost:9090/api/posts/all-posts`;
+
+      const response = await fetch(url);
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch posts");
+      }
+
+      const data = await response.json();
+      setPosts(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   if (loading) {
     return (
-      <div style={styles.center}>
-        <h2>Loading posts...</h2>
+      <div className="min-h-screen bg-gray-50 p-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {[...Array(8)].map((_, index) => (
+              <div
+                key={index}
+                className="h-96 bg-gray-200 rounded-2xl animate-pulse"
+              />
+            ))}
+          </div>
+        </div>
       </div>
     );
   }
 
   return (
-    <div style={styles.page}>
-      <h1 style={styles.title}>All Posts</h1>
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-7xl mx-auto px-6 py-10">
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold text-gray-900">
+            Get Cat
+          </h1>
 
-      <div style={styles.grid}>
-        {posts.map((post) => (
-          <div key={post.postId} style={styles.card}>
-            <div style={styles.imageWrapper}>
-              {post.animalPhoto ? (
-                <img
-                  src={post.animalPhoto}
-                  alt="animal"
-                  style={styles.image}
-                />
-              ) : (
-                <div style={styles.placeholder}>
-                  No Image
-                </div>
-              )}
-            </div>
+          <p className="text-gray-500 mt-2">
+            **
+          </p>
 
-            <div style={styles.content}>
-              <div style={styles.userSection}>
-                <div style={styles.avatar}>
-                  {post.user?.userPhoto ? (
+          <p className="mt-3 text-sm text-gray-400">
+            {posts.length} posts found
+          </p>
+        </div>
+
+        {/* Filter Bar */}
+        <div className="flex flex-wrap gap-3 mb-10">
+          {serviceTypes.map((service) => (
+            <button
+              key={service.value}
+              onClick={() => setServiceType(service.value)}
+              className={`px-4 py-2 rounded-full border text-sm font-medium transition-all duration-200
+                ${
+                  serviceType === service.value
+                    ? "bg-blue-600 text-white border-blue-600 shadow-md"
+                    : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
+                }
+              `}
+            >
+              {service.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Posts Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+          {posts.map((post) => (
+            <div
+              key={post.postId}
+              className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300"
+            >
+              <Link href={`all-posts/${post.postId}`}>
+                {/* Animal Image */}
+                <div className="h-56 overflow-hidden bg-gray-100">
+                  {post.animalPhoto ? (
                     <img
-                      src={post.user.userPhoto}
-                      alt="user"
-                      style={styles.avatarImage}
+                      src={post.animalPhoto}
+                      alt="animal"
+                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
                     />
                   ) : (
-                    <span>👤</span>
+                    <div className="w-full h-full flex items-center justify-center text-gray-400">
+                      No Image
+                    </div>
                   )}
                 </div>
 
-                <div>
-                  <h3 style={styles.username}>
-                    {post.user?.firstname} {post.user?.lastname}
-                  </h3>
+                {/* Content */}
+                <div className="p-5">
+                  {/* User */}
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-12 h-12 rounded-full overflow-hidden bg-gray-200 flex items-center justify-center">
+                      {post.user?.userPhoto ? (
+                        <img
+                          src={post.user.userPhoto}
+                          alt="user"
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <span>👤</span>
+                      )}
+                    </div>
 
-                  <p style={styles.email}>
-                    {post.user?.email}
+                    <div>
+                      <h3 className="font-semibold text-gray-900">
+                        {post.user?.firstname} {post.user?.lastname}
+                      </h3>
+
+                      <p className="text-sm text-gray-500 truncate">
+                        {post.user?.email}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Description */}
+                  <p className="text-gray-600 text-sm line-clamp-3 mb-4">
+                    {post.description}
                   </p>
+
+                  {/* Tags */}
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    <span className="px-3 py-1 rounded-full bg-gray-100 text-gray-700 text-xs font-medium">
+                      {post.animal?.species}
+                    </span>
+
+                    <span className="px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-xs font-medium">
+                      {post.petService?.serviceType}
+                    </span>
+                  </div>
+
+                  {/* Dates */}
+                  <div className="border-t pt-3 text-sm text-gray-500">
+                    <p>
+                      <span className="font-medium">Start:</span>{" "}
+                      {post.startDate}
+                    </p>
+
+                    <p>
+                      <span className="font-medium">End:</span>{" "}
+                      {post.endDate}
+                    </p>
+                  </div>
                 </div>
-              </div>
-
-              <p style={styles.description}>
-                {post.description}
-              </p>
-
-              <div style={styles.tags}>
-                <span style={styles.tag}>
-                  {post.animal?.species}
-                </span>
-
-                <span style={styles.tag}>
-                  {post.petService?.serviceType}
-                </span>
-              </div>
-
-              <div style={styles.dateSection}>
-                <p>
-                  <strong>Start:</strong> {post.startDate}
-                </p>
-
-                <p>
-                  <strong>End:</strong> {post.endDate}
-                </p>
-              </div>
+              </Link>
             </div>
+          ))}
+        </div>
+
+        {!loading && posts.length === 0 && (
+          <div className="text-center py-20">
+            <h3 className="text-xl font-semibold text-gray-700">
+              No posts found
+            </h3>
+
+            <p className="text-gray-500 mt-2">
+              Try selecting another service type.
+            </p>
           </div>
-        ))}
+        )}
       </div>
     </div>
   );
 }
-
-const styles = {
-  page: {
-    padding: "30px",
-    backgroundColor: "#f4f4f4",
-    minHeight: "100vh",
-  },
-
-  center: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    height: "100vh",
-  },
-
-  title: {
-    marginBottom: "30px",
-    fontSize: "32px",
-  },
-
-  grid: {
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))",
-    gap: "20px",
-  },
-
-  card: {
-    backgroundColor: "white",
-    borderRadius: "16px",
-    overflow: "hidden",
-    boxShadow: "0 2px 10px rgba(0,0,0,0.08)",
-    border: "1px solid #e5e5e5",
-  },
-
-  imageWrapper: {
-    width: "100%",
-    height: "220px",
-    backgroundColor: "#ddd",
-  },
-
-  image: {
-    width: "100%",
-    height: "100%",
-    objectFit: "cover",
-  },
-
-  placeholder: {
-    width: "100%",
-    height: "100%",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    color: "#666",
-    fontSize: "18px",
-  },
-
-  content: {
-    padding: "18px",
-  },
-
-  userSection: {
-    display: "flex",
-    alignItems: "center",
-    gap: "12px",
-    marginBottom: "16px",
-  },
-
-  avatar: {
-    width: "50px",
-    height: "50px",
-    borderRadius: "50%",
-    overflow: "hidden",
-    backgroundColor: "#ddd",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-
-  avatarImage: {
-    width: "100%",
-    height: "100%",
-    objectFit: "cover",
-  },
-
-  username: {
-    margin: 0,
-    fontSize: "18px",
-  },
-
-  email: {
-    margin: 0,
-    color: "#777",
-    fontSize: "14px",
-  },
-
-  description: {
-    marginBottom: "16px",
-    lineHeight: "1.5",
-  },
-
-  tags: {
-    display: "flex",
-    gap: "10px",
-    marginBottom: "16px",
-    flexWrap: "wrap",
-  },
-
-  tag: {
-    padding: "6px 12px",
-    borderRadius: "999px",
-    backgroundColor: "#efefef",
-    fontSize: "13px",
-    fontWeight: "bold",
-  },
-
-  dateSection: {
-    borderTop: "1px solid #eee",
-    paddingTop: "12px",
-    fontSize: "14px",
-    color: "#555",
-  },
-};
