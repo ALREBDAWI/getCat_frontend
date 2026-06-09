@@ -145,6 +145,7 @@ export default function CreatePostPage() {
             <option value="DOG">Dog</option>
             <option value="BIRD">Bird</option>
             <option value="LIZARD">Lizard</option>
+            <option value="RABBIT">rabbit</option>
           </select>
         </div>
 
@@ -160,8 +161,11 @@ export default function CreatePostPage() {
             className="w-full rounded-xl border border-gray-300 p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="">Select Service</option>
-            <option value="HOST">Host</option>
-            <option value="GUEST">Guest</option>
+            <option value="PET_SITTING">Pet sitting</option>
+            <option value="PET_BOARDING">Pet boarding</option>
+            <option value="DOG_WALKING">dog walking</option>
+            <option value="VETERINARY_VISIT">VETERINARY VISIT</option>
+            <option value="PET_GROOMING">PET GROOMING</option>
           </select>
         </div>
 

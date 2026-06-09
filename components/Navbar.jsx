@@ -1,47 +1,96 @@
-// components/Navbar.jsx
-
 "use client";
 
 import Link from "next/link";
 
-export default function Navbar({
-  currentUser,
-  onSignOut,
-}) {
+export default function Navbar() {
+
+  const token =
+    typeof window !== "undefined"
+      ? localStorage.getItem("getcat_user_token")
+      : null;
+
+  const handleLogout = () => {
+    localStorage.removeItem("getcat_user_token");
+    window.location.reload();
+  };
+
   return (
-    <nav className="bg-white rounded-2xl shadow-sm mb-8 px-6 py-4 flex items-center justify-between">
+    <nav className="bg-white border-b shadow-sm">
 
-      <Link
-        href="/all-posts"
-        className="text-2xl font-bold text-blue-600"
-      >
-        GetCat 🐱
-      </Link>
+      <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
 
-      <div className="flex items-center gap-4">
-
+        {/* Logo */}
         <Link
-          href="/create-post"
-          className="px-4 py-2 bg-green-600 text-white rounded-xl hover:bg-green-700"
+          href="/all-posts"
+          className="text-2xl font-bold text-blue-600"
         >
-          + Create Post
+          GetCat
         </Link>
 
-        <Link
-          href="/profile"
-          className="flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-xl"
-        >
-          <span>
-            {currentUser?.firstname}
-          </span>
-        </Link>
+        {/* Navigation */}
+        <div className="flex items-center gap-4">
 
-        <button
-          onClick={onSignOut}
-          className="px-4 py-2 bg-red-600 text-white rounded-xl"
-        >
-          Sign Out
-        </button>
+          {token ? (
+            <>
+              <Link
+                href="/my-profile"
+                className="text-gray-700 hover:text-blue-600"
+              >
+                Mon Profil
+              </Link>
+
+              <Link
+                href="/my-posts"
+                className="text-gray-700 hover:text-blue-600"
+              >
+                Mes Annonces
+              </Link>
+
+              <button
+                onClick={handleLogout}
+                className="
+                  bg-red-500
+                  hover:bg-red-600
+                  text-white
+                  px-4
+                  py-2
+                  rounded-xl
+                "
+              >
+                Déconnexion
+              </button>
+            </>
+          ) : (
+            <>
+              <Link
+                href="/auth/signin"
+                className="
+                  border
+                  px-4
+                  py-2
+                  rounded-xl
+                "
+              >
+                Connexion
+              </Link>
+
+              <Link
+                href="/auth/signup"
+                className="
+                  bg-blue-600
+                  hover:bg-blue-700
+                  text-white
+                  px-4
+                  py-2
+                  rounded-xl
+                "
+              >
+                Inscription
+              </Link>
+            </>
+          )}
+
+        </div>
 
       </div>
 
