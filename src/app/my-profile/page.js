@@ -22,6 +22,7 @@ export default function ProfilePage() {
     firstname: "",
     lastname: "",
     phone: "",
+    email: "",
     address: {
       buildingNum: "",
       street: "",
@@ -56,7 +57,8 @@ export default function ProfilePage() {
         }
 
         const data = await response.json();
-
+        console.log(data);
+        
         setUser(data);
 
         setFormData({
@@ -325,6 +327,15 @@ export default function ProfilePage() {
             value={formData.phone}
             onChange={handleChange}
             placeholder="Phone"
+            className="border p-3 rounded-xl"
+          />
+
+          <input
+            type="text"
+            name="Email"
+            value={formData.email}
+            onChange={handleChange}
+            placeholder="email"
             className="border p-3 rounded-xl"
           />
 

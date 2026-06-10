@@ -54,11 +54,19 @@ export default function PostDetailsPage() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <h2 className="text-2xl font-semibold text-gray-600">
-          Post not found
+          Annonce introuvable
         </h2>
       </div>
     );
   }
+
+  const serviceLabels = {
+  PET_SITTING: "Garde d'animaux",
+  PET_BOARDING: "Hébergement",
+  DOG_WALKING: "Promenade",
+  VETERINARY_VISIT: "Visite vétérinaire",
+  PET_GROOMING: "Toilettage",
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -69,7 +77,7 @@ export default function PostDetailsPage() {
           href="/all-posts"
           className="inline-flex items-center gap-2 mb-6 text-blue-600 hover:text-blue-800 font-medium"
         >
-          ← Back to Posts
+          ← Retour aux annonces
         </Link>
 
         {/* Hero Image */}
@@ -82,7 +90,7 @@ export default function PostDetailsPage() {
             />
           ) : (
             <div className="h-[450px] flex items-center justify-center bg-gray-200 text-gray-500">
-              No Image Available
+              Aucune image disponible
             </div>
           )}
         </div>
@@ -105,7 +113,7 @@ export default function PostDetailsPage() {
               </div>
 
               <h1 className="text-4xl font-bold text-gray-900 mb-6">
-                Get Cat Post
+                GetCat annonce 
               </h1>
 
               <div className="prose max-w-none">
@@ -120,14 +128,14 @@ export default function PostDetailsPage() {
 
               <div className="border-t mt-8 pt-8">
                 <h3 className="text-xl font-semibold mb-4">
-                  Service Period
+                  Période du service
                 </h3>
 
                 <div className="grid md:grid-cols-2 gap-4">
 
                   <div className="bg-gray-50 p-4 rounded-2xl">
                     <p className="text-sm text-gray-500">
-                      Start Date
+                      Date de début
                     </p>
 
                     <p className="font-semibold text-lg">
@@ -137,7 +145,7 @@ export default function PostDetailsPage() {
 
                   <div className="bg-gray-50 p-4 rounded-2xl">
                     <p className="text-sm text-gray-500">
-                      End Date
+                      Date de fin
                     </p>
 
                     <p className="font-semibold text-lg">
@@ -157,7 +165,7 @@ export default function PostDetailsPage() {
             <div className="bg-white rounded-3xl p-6 shadow-sm sticky top-6">
 
               <h3 className="text-xl font-bold mb-6">
-                Owner Information
+                À propos du propriétaire
               </h3>
 
               <div className="flex items-center gap-4 mb-6">
@@ -191,7 +199,7 @@ export default function PostDetailsPage() {
 
                 <div className="border rounded-2xl p-4">
                   <p className="text-sm text-gray-500">
-                    Service Type
+                    Type de service
                   </p>
 
                   <p className="font-semibold">
@@ -201,7 +209,7 @@ export default function PostDetailsPage() {
 
                 <div className="border rounded-2xl p-4">
                   <p className="text-sm text-gray-500">
-                    Animal Species
+                    Espèce animale
                   </p>
 
                   <p className="font-semibold">
@@ -213,7 +221,7 @@ export default function PostDetailsPage() {
 
               
                 
-                <Link href={`/profile/${post.user.id}`}
+                      <Link href={`/profile/${post.user.id}`}
                 className="
                   w-full
                   mt-6
@@ -226,8 +234,12 @@ export default function PostDetailsPage() {
                   transition
                 "
               >
-                  Contact Owner
+                <button>
+                  Voir le profil
+                  </button>
               </Link>
+                
+                
               
               
 
